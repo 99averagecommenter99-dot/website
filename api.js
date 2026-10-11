@@ -234,13 +234,28 @@ async function handleRequest(request, response) {
     return response.end('Not found');
   }
   const absolutePath = path.join(root, filename);
-  const stat = fs.statSync(absolutePath);
-  response.writeHead(200, {
-    'Content-Type': contentTypes[path.extname(filename)] || 'application/octet-stream',
-    'Content-Length': stat.size,
-    'Cache-Control': filename.endsWith('.pdf') ? 'public, max-age=3600' : 'no-store',
+  const contentType = contentTypes[path.extname(filename)] || 'application/octet-stream';
+  const cacheControl = filename.endsWith('.pdf') ? 'public, max-age=3600' : 'no-store';
+  const headers = {
+    'Content-Type': contentType,
+    'Cache-Control': cacheControl,
     'X-Content-Type-Options': 'nosniff',
-  });
+  };
+
+  if (process.env.VERCEL) {
+    try {
+      const body = await fs.promises.readFile(absolutePath);
+      response.writeHead(200, { ...headers, 'Content-Length': body.length });
+      return response.end(request.method === 'HEAD' ? undefined : body);
+    } catch (error) {
+      console.error('Could not read deployed asset:', filename, error.message);
+      response.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
+      return response.end('Could not read resource');
+    }
+  }
+
+  const stat = fs.statSync(absolutePath);
+  response.writeHead(200, { ...headers, 'Content-Length': stat.size });
   if (request.method === 'HEAD') return response.end();
   fs.createReadStream(absolutePath).pipe(response);
 }

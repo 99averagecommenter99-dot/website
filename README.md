@@ -13,7 +13,7 @@ The server calls Google's Gemini `generateContent` API. See Google's [API key gu
 
 ## Deploy to Vercel
 
-Vercel's Node.js runtime detects the root `server.js` entry point and routes web requests to the existing server. The HTML and PDFs are deployed as static assets alongside that server; the server continues to call Gemini using a server-side environment variable. See Vercel's [Node.js runtime guide](https://vercel.com/docs/functions/runtimes/node-js), [function duration limits](https://vercel.com/docs/functions/configuring-functions/duration), and [CLI deployment guide](https://vercel.com/docs/cli/deploy).
+Vercel's Node.js runtime detects the root `server.js` entry point and routes web requests to the existing server. The HTML and PDFs are included in the server bundle and served by the server; the server continues to call Gemini using a server-side environment variable. See Vercel's [Node.js runtime guide](https://vercel.com/docs/functions/runtimes/node-js), [function duration limits](https://vercel.com/docs/functions/configuring-functions/duration), and [CLI deployment guide](https://vercel.com/docs/cli/deploy).
 
 1. Create or sign in to a Vercel account, then install the [Vercel CLI](https://vercel.com/docs/cli): `npm install --global vercel`.
 2. From this project directory, run `vercel login`, then `vercel` and follow its setup prompts to create/link the project. The first deployment is a production deployment; later non-production deploys get preview URLs.
