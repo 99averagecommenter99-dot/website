@@ -1,11 +1,5 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "functions": {
-    "server.js": {
-      "maxDuration": 30,
-      "includeFiles": "{index.html,resources/**}"
-    }
-  },
   "headers": [
     {
       "source": "/resources/(.*)",
