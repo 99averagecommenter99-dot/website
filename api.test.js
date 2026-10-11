@@ -12,6 +12,7 @@ const { isAllowedOrigin } = api;
 const realFetch = global.fetch;
 let origin;
 let providerStatus = 200;
+let providerStatuses = [];
 let providerPayload = { candidates: [{ content: { parts: [{ text: 'Hint: split the shape in half.\nStep 1: find the area of each part.' }] } }] };
 let providerCalls = [];
 
@@ -22,8 +23,9 @@ global.fetch = async (url, options = {}) => {
     apiKey: options.headers['x-goog-api-key'],
     body: JSON.parse(options.body),
   });
+  const status = providerStatuses.length ? providerStatuses.shift() : providerStatus;
   return new Response(JSON.stringify(providerPayload), {
-    status: providerStatus,
+    status,
     headers: { 'Content-Type': 'application/json' },
   });
 };
@@ -167,21 +169,39 @@ test('serves the page, exposes only AI readiness, and protects tutor requests', 
     assert.match(providerCalls[0].body.systemInstruction.parts[0].text, /school-age students/);
   });
 
+  await t.test('retries transient Gemini errors and returns a useful answer after recovery', async () => {
+    providerStatuses = [503, 200];
+    const countBeforeRetry = providerCalls.length;
+    const response = await ask(validQuestion);
+    assert.equal(response.status, 200);
+    assert.match((await response.json()).answer, /Step 1/);
+    assert.equal(providerCalls.length - countBeforeRetry, 2);
+    providerStatuses = [];
+  });
+
+  await t.test('does not retry permanent provider errors', async () => {
+    providerStatuses = [401, 200];
+    const countBeforeFailure = providerCalls.length;
+    const response = await ask(validQuestion);
+    assert.equal(response.status, 502);
+    assert.equal(providerCalls.length - countBeforeFailure, 1);
+    providerStatuses = [];
+  });
+
   await t.test('rejects malformed, unsupported, and oversized input', async () => {
     assert.equal((await ask('{broken')).status, 400);
     assert.equal((await ask('{}', { 'Content-Type': 'text/plain', Origin: origin })).status, 415);
     assert.equal((await ask(JSON.stringify({ ...validQuestion, history: [{ role: 'student', text: 'x'.repeat(22000) }] }))).status, 413);
   });
 
-  await t.test('handles provider throttling and hides provider error details', async () => {
-    providerStatus = 429;
+  await t.test('retries throttled provider responses and hides final provider error details', async () => {
+    providerStatuses = [429, 429, 429];
+    const countBeforeThrottle = providerCalls.length;
     const limited = await ask(validQuestion);
     assert.equal(limited.status, 503);
     assert.match((await limited.json()).error, /wait a little/i);
-    providerStatus = 401;
-    const failed = await ask(validQuestion);
-    assert.equal(failed.status, 502);
-    assert.doesNotMatch(await failed.text(), /Gemini|fixture/i);
+    assert.equal(providerCalls.length - countBeforeThrottle, 3);
+    providerStatuses = [];
     providerStatus = 200;
   });
 
