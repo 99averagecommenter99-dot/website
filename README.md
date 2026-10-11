@@ -24,6 +24,14 @@ The CLI command runs locally and requires Vercel account authentication. Connect
 
 After deployment, check that the homepage loads, `/api/tutor/status` returns `{"configured":true}`, all three PDF links open, a consented question with a matching contest/grade gets an answer, and a request with a foreign `Origin` receives 403.
 
+## Production tutor health alerts
+
+The GitHub Actions workflow at [.github/workflows/tutor-health.yml](.github/workflows/tutor-health.yml) runs a daily synthetic tutor question against the production site and can also be started manually from the Actions tab. It checks both server-side key readiness and an actual tutor response. Failed runs are visible in Actions; GitHub can email you if you enable Actions failure notifications in your GitHub notification settings. Each successful run makes one Gemini request (which may incur usage charges) and sends only a generic math test question. The probe needs no API key or other secret in GitHub because it calls the public production endpoint.
+
+To run the same check locally, use `node scripts/check-tutor-health.js`. It can target a different HTTPS origin with `STEPWISE_SITE_URL` and exits non-zero if the tutor is not configured or fails to answer. See the [health-check script](scripts/check-tutor-health.js).
+
+The health monitor is enabled when this workflow is present on the repository default branch and GitHub Actions is enabled. Enable workflow-failure notifications in your GitHub settings to receive email alerts.
+
 ## Test
 
 Run the dependency-free API checks with:
