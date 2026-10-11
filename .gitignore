@@ -1,0 +1,16 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+
+# Local tooling and generated output
+.vercel/
+.wrangler/
+.wrangler-dry-run/
+node_modules/
+dist/
+
+# Local process and editor artifacts
+.stepwise.pid
+*.log
+*.tmp

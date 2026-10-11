@@ -1,0 +1,854 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f8f2">
+  <meta name="description" content="Get ready for Waterloo math and computing contests with flexible, step-by-step practice for Grades 5–12.">
+  <title>Stepwise</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #192c25;
+      --ink-soft: #53635c;
+      --green: #245b45;
+      --green-dark: #1a4635;
+      --green-light: #e2f0e7;
+      --lime: #d9f16b;
+      --paper: #f7f8f2;
+      --white: #fff;
+      --line: #e3e8df;
+      --orange: #ef9b67;
+      --lavender: #ecebfa;
+      --shadow: 0 22px 70px rgba(28, 54, 41, .11);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      font-family: "Avenir Next", Avenir, "Segoe UI", system-ui, -apple-system, sans-serif;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+    body { margin: 0; background: var(--paper); color: var(--ink); line-height: 1.55; }
+    a { color: inherit; text-decoration: none; }
+    button { color: inherit; font: inherit; }
+    .wrap { width: min(1160px, calc(100% - 48px)); margin-inline: auto; }
+    .announcement { min-height: 38px; padding: 8px 16px; background: var(--green-dark); color: #f6f9ed; text-align: center; font-size: 12px; letter-spacing: .025em; }
+    .announcement strong { color: var(--lime); font-weight: 700; }
+    .announcement a { text-decoration: underline; text-underline-offset: 3px; }
+    @media (max-width: 720px) { .announcement { font-size: 9px; } }
+    .site-header { position: sticky; top: 0; z-index: 10; background: rgba(247, 248, 242, .92); border-bottom: 1px solid rgba(226, 232, 223, .8); backdrop-filter: blur(14px); }
+    .nav { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 28px; }
+    .brand { display: inline-flex; align-items: center; gap: 10px; font-size: 19px; line-height: 1; font-weight: 750; letter-spacing: -.055em; white-space: nowrap; }
+    .brand-mark { width: 32px; height: 32px; position: relative; display: inline-grid; place-items: center; border-radius: 11px; background: var(--lime); transform: rotate(-5deg); }
+    .brand-mark::before, .brand-mark::after { content: ""; position: absolute; width: 9px; height: 9px; border-radius: 50%; background: var(--green); }
+    .brand-mark::before { left: 7px; top: 7px; box-shadow: 10px 10px 0 var(--green); }
+    .brand-mark::after { right: 7px; top: 7px; box-shadow: -10px 10px 0 var(--green); }
+    .nav-links { display: flex; align-items: center; gap: 34px; color: #52635b; font-size: 13px; font-weight: 600; }
+    .nav-links a:hover, .footer-links a:hover { color: var(--green); }
+    .nav-actions { display: flex; align-items: center; gap: 16px; }
+    .text-link { color: var(--ink-soft); font-size: 13px; font-weight: 650; }
+    .button { min-height: 48px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; border: 1px solid transparent; border-radius: 999px; padding: 0 21px; background: var(--green); color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; transition: transform .18s ease, background .18s ease, box-shadow .18s ease; }
+    .button:hover { background: var(--green-dark); box-shadow: 0 8px 20px rgba(26, 70, 53, .18); transform: translateY(-1px); }
+    .button:focus-visible, a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px solid #9abb4a; outline-offset: 3px; }
+    .button-small { min-height: 40px; padding: 0 17px; font-size: 12px; }
+    .button-light { background: #fff; color: var(--green-dark); border-color: var(--line); }
+    .button-light:hover { background: #f4f7ed; color: var(--green-dark); }
+    .button-arrow { font-size: 17px; line-height: 0; }
+    .menu-toggle { display: none; width: 42px; height: 42px; align-items: center; justify-content: center; border: 1px solid var(--line); border-radius: 50%; background: white; cursor: pointer; }
+
+    .hero { position: relative; overflow: hidden; padding: 75px 0 84px; }
+    .hero::before { content: ""; position: absolute; width: 450px; height: 450px; border-radius: 50%; top: 20px; right: -245px; background: #e5f0d9; opacity: .7; }
+    .hero-grid { position: relative; display: grid; grid-template-columns: 1.03fr .97fr; align-items: center; gap: 65px; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 9px; color: var(--green); font-size: 11px; font-weight: 750; letter-spacing: .11em; text-transform: uppercase; }
+    .eyebrow-dot { width: 8px; height: 8px; border-radius: 50%; background: #ef9b67; box-shadow: 0 0 0 4px #f8e4d8; }
+    h1, h2, h3, p { margin-top: 0; }
+    .hero h1 { max-width: 620px; margin: 18px 0 20px; font-size: clamp(42px, 5.1vw, 65px); line-height: 1.055; letter-spacing: -.064em; font-weight: 730; }
+    .hero h1 span { color: var(--green); }
+    .hero-copy { max-width: 530px; margin-bottom: 26px; color: #53635c; font-size: 15px; line-height: 1.78; }
+    .hero-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .hero-proof { display: flex; align-items: center; gap: 12px; margin-top: 26px; color: #65736c; font-size: 11px; }
+    .proof-avatars { display: flex; padding-left: 5px; }
+    .proof-avatars span { width: 25px; height: 25px; margin-left: -5px; display: grid; place-items: center; border: 2px solid var(--paper); border-radius: 50%; background: #dce9dc; color: #315944; font-size: 9px; font-weight: 750; }
+    .proof-avatars span:nth-child(2) { background: #f4d9c9; color: #81553a; }
+    .proof-avatars span:nth-child(3) { background: #e4e1f4; color: #55527d; }
+    .hero-visual { position: relative; min-width: 0; padding: 10px 13px 16px 0; }
+    .visual-halo { position: absolute; inset: -5px 12px 16px -22px; border-radius: 38% 62% 57% 43% / 48% 39% 61% 52%; background: #e7efd9; transform: rotate(-5deg); }
+    .quiz-card { position: relative; max-width: 485px; margin-left: auto; padding: 23px 25px 21px; border: 1px solid #edf0e9; border-radius: 23px; background: #fff; box-shadow: var(--shadow); }
+    .quiz-top { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-bottom: 18px; border-bottom: 1px solid #edf0eb; }
+    .quiz-label { display: flex; align-items: center; gap: 9px; color: #758178; font-size: 10px; font-weight: 750; letter-spacing: .09em; text-transform: uppercase; }
+    .sparkle { width: 27px; height: 27px; display: grid; place-items: center; border-radius: 9px; background: #edf4dd; color: var(--green); font-size: 16px; }
+    .streak { padding: 6px 9px; border-radius: 999px; background: #fff4ec; color: #a2633d; font-size: 10px; font-weight: 700; white-space: nowrap; }
+    .quiz-heading { margin: 20px 0 4px; font-size: 19px; line-height: 1.3; letter-spacing: -.035em; }
+    .quiz-meta { margin: 0 0 13px; color: #869088; font-size: 11px; }
+    .question { margin: 0 0 16px; padding: 16px; border-radius: 13px; background: #f7f8f3; color: #293c33; font-size: 13px; line-height: 1.6; }
+    .answers { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+    .answer { min-height: 42px; padding: 9px 12px; border: 1px solid #e4e9e1; border-radius: 11px; background: white; color: #44554c; text-align: left; font-size: 12px; cursor: pointer; transition: .15s ease; }
+    .answer:hover { border-color: #8aab91; background: #f8fbf5; }
+    .answer[aria-pressed="true"][data-correct="true"] { border-color: #71a07b; background: #e9f4e9; color: #26583b; }
+    .answer[aria-pressed="true"][data-correct="false"] { border-color: #e5a18b; background: #fff1eb; color: #854c39; }
+    .quiz-feedback { min-height: 0; margin: 11px 0 0; color: var(--green-dark); font-size: 12px; font-weight: 650; }
+    .quiz-feedback:empty { display: none; }
+    .quiz-tools { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 13px; }
+    .plain-action { padding: 4px 0; border: 0; border-bottom: 1px solid #b5c6b8; background: transparent; color: var(--green); font-size: 11px; font-weight: 700; cursor: pointer; }
+    .mini-note { color: #919991; font-size: 9px; text-align: right; }
+    .hint, .solution { margin-top: 12px; padding: 12px 14px; border-radius: 11px; background: #f3f5e8; color: #47564a; font-size: 11px; line-height: 1.6; }
+    .solution { background: #eef5ef; }
+    .solution ol { margin: 6px 0 0; padding-left: 18px; }
+    .tutor-section { padding-top: 84px; }
+    .tutor-panel { display: grid; grid-template-columns: .85fr 1.15fr; overflow: hidden; border: 1px solid var(--line); border-radius: 24px; background: #fff; box-shadow: 0 15px 45px rgba(28,54,41,.07); }
+    .tutor-intro { padding: 34px; background: #eef2e9; }
+    .tutor-intro h2 { margin: 14px 0 12px; font-size: clamp(27px, 3vw, 37px); line-height: 1.12; letter-spacing: -.05em; }
+    .tutor-intro > p { margin-bottom: 21px; color: #5c6d61; font-size: 12px; line-height: 1.75; }
+    .tutor-steps { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+    .tutor-steps li { display: flex; align-items: flex-start; gap: 9px; color: #53635b; font-size: 10px; line-height: 1.55; }
+    .tutor-step-icon { flex: 0 0 20px; width: 20px; height: 20px; display: grid; place-items: center; border-radius: 7px; background: #fff; color: var(--green); font-size: 11px; font-weight: 750; }
+    .tutor-chat { display: flex; min-height: 440px; flex-direction: column; padding: 25px; }
+    .tutor-chat-top { display: flex; align-items: center; gap: 11px; padding-bottom: 16px; border-bottom: 1px solid #edf0eb; }
+    .tutor-avatar { width: 37px; height: 37px; display: grid; place-items: center; border-radius: 13px; background: var(--lime); color: var(--green-dark); font-size: 19px; }
+    .tutor-title { margin: 0; font-size: 13px; font-weight: 750; }
+    .tutor-status { display: flex; align-items: center; gap: 5px; margin-top: 2px; color: #77837a; font-size: 9px; }
+    .tutor-status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #77a87d; }
+    .tutor-transcript { display: flex; max-height: 240px; flex: 1; flex-direction: column; gap: 10px; overflow-y: auto; padding: 16px 2px; }
+    .tutor-message { max-width: 92%; padding: 11px 13px; border-radius: 14px; background: #f3f5f0; color: #3d4c43; font-size: 11px; line-height: 1.7; overflow-wrap: anywhere; white-space: pre-wrap; }
+    .tutor-message--student { align-self: flex-end; border-bottom-right-radius: 4px; background: var(--green); color: white; }
+    .tutor-message--assistant { align-self: flex-start; border-bottom-left-radius: 4px; }
+    .tutor-message--error { border: 1px solid #f0d9ce; background: #fff6f1; color: #774935; }
+    .tutor-typing { color: #7b877f; font-style: italic; }
+    .tutor-presets { display: flex; flex-wrap: wrap; gap: 6px; padding-bottom: 12px; }
+    .tutor-preset { min-height: 31px; padding: 0 10px; border: 1px solid #e2e8df; border-radius: 999px; background: #fff; color: #52635b; font-size: 9px; font-weight: 650; cursor: pointer; }
+    .tutor-preset:hover { border-color: #94af98; background: #f7faf3; }
+    .tutor-controls { display: grid; grid-template-columns: 1fr 105px; gap: 8px; margin-bottom: 9px; }
+    .tutor-select, .tutor-input { width: 100%; min-height: 42px; border: 1px solid #dfe6dc; border-radius: 10px; background: #fff; color: var(--ink); font: inherit; font-size: 11px; }
+    .tutor-controls .tutor-select:first-child { min-width: 0; }
+    .tutor-select { padding: 0 10px; }
+    .tutor-select option:disabled { color: #9aa49c; }
+    .tutor-compose { display: flex; align-items: flex-end; gap: 8px; }
+    .tutor-input { min-height: 50px; max-height: 120px; resize: vertical; padding: 12px; line-height: 1.5; }
+    .tutor-input::placeholder { color: #8a948d; }
+    .tutor-send { flex: 0 0 46px; width: 46px; min-height: 46px; display: grid; place-items: center; border: 0; border-radius: 12px; background: var(--green); color: #fff; font-size: 17px; cursor: pointer; }
+    .tutor-send:hover { background: var(--green-dark); }
+    .tutor-send:disabled, .tutor-input:disabled, .tutor-select:disabled { cursor: wait; opacity: .65; }
+    .tutor-consent { display: flex; align-items: flex-start; gap: 8px; margin: 9px 0 0; color: #66756b; font-size: 10px; line-height: 1.5; cursor: pointer; }
+    .tutor-consent input { flex: 0 0 auto; width: 15px; height: 15px; margin: 1px 0 0; accent-color: var(--green); }
+    .tutor-note { margin: 9px 0 0; color: #8a948d; font-size: 9px; line-height: 1.5; }
+    .tutor-note a { color: var(--green); text-decoration: underline; text-underline-offset: 2px; }
+    .tutor-problem { margin: 0; color: #8a5341; font-size: 10px; }
+    [hidden] { display: none !important; }
+    .floating-note { position: absolute; z-index: 1; right: -22px; bottom: 3px; display: flex; align-items: center; gap: 9px; padding: 11px 15px; border: 1px solid #edf0e9; border-radius: 14px; background: #fff; box-shadow: 0 10px 25px rgba(28,54,41,.1); font-size: 10px; font-weight: 700; transform: rotate(2deg); }
+    .floating-check { width: 22px; height: 22px; display: grid; place-items: center; border-radius: 50%; background: var(--lime); color: var(--green-dark); }
+
+    .trust-strip { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: rgba(255,255,255,.54); }
+    .trust-inner { min-height: 75px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .trust-item { display: flex; align-items: center; gap: 10px; color: #53635b; font-size: 11px; font-weight: 650; }
+    .trust-icon { width: 27px; height: 27px; display: grid; place-items: center; border-radius: 9px; background: #e9f0df; color: var(--green); font-size: 13px; }
+    .trust-divider { width: 1px; height: 27px; background: var(--line); }
+
+    .section { padding: 100px 0; }
+    .section-heading { max-width: 590px; margin: 0 auto 44px; text-align: center; }
+    .section-heading .eyebrow { justify-content: center; margin-bottom: 12px; }
+    .section-heading h2 { margin-bottom: 13px; font-size: clamp(32px, 4vw, 45px); line-height: 1.12; letter-spacing: -.055em; }
+    .section-heading p { margin-bottom: 0; color: var(--ink-soft); font-size: 14px; line-height: 1.7; }
+    .benefit-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 17px; }
+    .benefit { min-height: 213px; padding: 26px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: #fff; }
+    .benefit-icon { width: 42px; height: 42px; display: grid; place-items: center; margin-bottom: 22px; border-radius: 13px; background: var(--green-light); color: var(--green); font-size: 19px; }
+    .benefit:nth-child(2) .benefit-icon { background: #fbeadc; color: #9a663d; }
+    .benefit:nth-child(3) .benefit-icon { background: var(--lavender); color: #585881; }
+    .benefit h3 { margin-bottom: 8px; font-size: 17px; letter-spacing: -.025em; }
+    .benefit p { margin: 0; color: #68776f; font-size: 12px; line-height: 1.7; }
+    .soft-section { background: #eef2e9; }
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+    .step { position: relative; padding: 2px 20px; text-align: center; }
+    .step-number { width: 44px; height: 44px; display: grid; place-items: center; margin: 0 auto 16px; border: 1px solid #d8e3d3; border-radius: 50%; background: #fff; color: var(--green); font-size: 13px; font-weight: 750; }
+    .step h3 { margin-bottom: 8px; font-size: 17px; letter-spacing: -.025em; }
+    .step p { max-width: 275px; margin: 0 auto; color: #66756b; font-size: 12px; line-height: 1.7; }
+
+    .contest-section { padding: 100px 0 108px; }
+    .resource-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .resource-card { display: flex; min-height: 186px; flex-direction: column; align-items: flex-start; padding: 21px; border: 1px solid var(--line); border-radius: 17px; background: #fff; }
+    .resource-label { display: inline-flex; margin-bottom: 13px; padding: 5px 9px; border-radius: 7px; background: #edf3e7; color: #476647; font-size: 9px; font-weight: 750; }
+    .resource-card h3 { margin: 0 0 8px; font-size: 15px; line-height: 1.4; letter-spacing: -.025em; }
+    .resource-card p { margin: 0 0 17px; color: #738077; font-size: 10px; line-height: 1.6; }
+    .resource-link { margin-top: auto; color: var(--green); font-size: 11px; font-weight: 750; text-decoration: underline; text-underline-offset: 3px; }
+    .contest-heading { display: flex; align-items: end; justify-content: space-between; gap: 28px; margin-bottom: 27px; }
+    .contest-heading .section-heading { margin: 0; text-align: left; }
+    .contest-heading .section-heading .eyebrow { justify-content: flex-start; }
+    .contest-heading .section-heading h2 { margin-bottom: 9px; }
+    .contest-heading .section-heading p { max-width: 530px; }
+    .filters { display: flex; flex-wrap: wrap; gap: 7px; padding-bottom: 3px; }
+    .filter { min-height: 35px; padding: 0 13px; border: 1px solid #dfe6dc; border-radius: 999px; background: transparent; color: #65746b; font-size: 10px; font-weight: 700; cursor: pointer; }
+    .filter:hover { border-color: #94af98; }
+    .filter[aria-pressed="true"] { border-color: var(--green); background: var(--green); color: white; }
+    .contest-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+    .contest-card { display: flex; min-height: 250px; flex-direction: column; padding: 20px 18px 17px; border: 1px solid var(--line); border-radius: 17px; background: #fff; transition: transform .18s ease, box-shadow .18s ease; }
+    .contest-card:hover { box-shadow: 0 12px 35px rgba(28,54,41,.08); transform: translateY(-3px); }
+    .contest-card[hidden] { display: none; }
+    .contest-topline { display: flex; align-items: center; justify-content: space-between; gap: 7px; margin-bottom: 15px; }
+    .subject-tag { padding: 5px 8px; border-radius: 7px; background: #edf3e7; color: #476647; font-size: 9px; font-weight: 750; }
+    .grade-tag { color: #7f8b82; font-size: 9px; font-weight: 700; white-space: nowrap; }
+    .contest-card h3 { min-height: 44px; margin: 0 0 8px; font-size: 15px; line-height: 1.4; letter-spacing: -.025em; }
+    .contest-card p { min-height: 35px; margin: 0 0 16px; color: #738077; font-size: 10px; line-height: 1.6; }
+    .contest-date { margin-top: auto; padding-top: 13px; border-top: 1px solid #edf0eb; }
+    .contest-date strong { display: block; margin-bottom: 2px; color: var(--green-dark); font-size: 11px; }
+    .contest-date span { color: #838f86; font-size: 9px; }
+    .date-note { margin: 17px 0 0; color: #7b877f; font-size: 10px; text-align: center; }
+    .date-note strong { color: #59675e; }
+
+    .parent-band { padding: 82px 0; background: var(--green-dark); color: white; }
+    .parent-grid { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 70px; }
+    .parent-copy .eyebrow { color: var(--lime); }
+    .parent-copy h2 { max-width: 480px; margin: 15px 0 15px; font-size: clamp(32px, 4vw, 45px); line-height: 1.12; letter-spacing: -.055em; }
+    .parent-copy p { max-width: 480px; margin: 0; color: #cfdbd1; font-size: 13px; line-height: 1.8; }
+    .parent-points { display: grid; gap: 13px; }
+    .parent-point { display: flex; align-items: flex-start; gap: 13px; padding: 16px 18px; border: 1px solid rgba(255,255,255,.15); border-radius: 15px; background: rgba(255,255,255,.055); }
+    .parent-point-icon { flex: 0 0 27px; width: 27px; height: 27px; display: grid; place-items: center; border-radius: 9px; background: rgba(217,241,107,.15); color: var(--lime); font-size: 13px; }
+    .parent-point strong { display: block; margin: 1px 0 3px; font-size: 12px; }
+    .parent-point p { margin: 0; color: #c4d2c7; font-size: 10px; line-height: 1.6; }
+
+    .faq-section { padding: 96px 0; }
+    .faq-grid { max-width: 760px; margin: 0 auto; }
+    .faq-grid details { border-bottom: 1px solid var(--line); }
+    .faq-grid summary { position: relative; padding: 19px 38px 19px 0; list-style: none; font-size: 14px; font-weight: 700; cursor: pointer; }
+    .faq-grid summary::-webkit-details-marker { display: none; }
+    .faq-grid summary::after { content: "+"; position: absolute; right: 4px; top: 13px; color: var(--green); font-size: 23px; font-weight: 400; }
+    .faq-grid details[open] summary::after { content: "−"; }
+    .faq-grid details p { max-width: 680px; margin: -3px 35px 19px 0; color: #68766e; font-size: 12px; line-height: 1.75; }
+    .faq-grid details a { color: var(--green); text-decoration: underline; text-underline-offset: 2px; }
+
+    .final-cta { padding: 0 0 94px; }
+    .cta-panel { position: relative; overflow: hidden; display: flex; align-items: center; justify-content: space-between; gap: 35px; padding: 42px 48px; border-radius: 24px; background: #e7efd9; }
+    .cta-panel::after { content: ""; position: absolute; width: 230px; height: 230px; right: 225px; top: -155px; border: 1px solid rgba(36,91,69,.13); border-radius: 50%; box-shadow: 0 0 0 25px rgba(36,91,69,.035), 0 0 0 52px rgba(36,91,69,.025); }
+    .cta-panel h2 { position: relative; z-index: 1; max-width: 535px; margin: 0; font-size: clamp(26px, 3.5vw, 37px); line-height: 1.2; letter-spacing: -.05em; }
+    .cta-panel .button { position: relative; z-index: 1; flex-shrink: 0; }
+    .site-footer { padding: 28px 0 32px; border-top: 1px solid var(--line); }
+    .footer-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .footer-brand { font-size: 15px; }
+    .footer-note { margin: 8px 0 0; color: #7d8980; font-size: 10px; }
+    .footer-links { display: flex; gap: 22px; color: #647269; font-size: 10px; font-weight: 600; }
+    .copyright { color: #939d95; font-size: 9px; }
+
+    @media (max-width: 960px) {
+      .hero-grid { gap: 35px; }
+      .hero h1 { font-size: clamp(43px, 6vw, 57px); }
+      .nav-links { gap: 20px; }
+      .contest-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .contest-card:last-child:nth-child(5) { grid-column: auto; }
+      .contest-card { min-height: 222px; }
+      .resource-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .tutor-panel { grid-template-columns: .8fr 1.2fr; }
+      .tutor-intro { padding: 26px; }
+      .parent-grid { gap: 40px; }
+      .floating-note { right: -4px; }
+    }
+    @media (max-width: 720px) {
+      .wrap { width: min(100% - 36px, 540px); }
+      .announcement { font-size: 10px; }
+      .nav { min-height: 66px; }
+      .nav-actions { gap: 10px; }
+      .nav-actions .text-link, .nav-actions .button { display: none; }
+      .menu-toggle { display: inline-flex; }
+      .nav-links { position: absolute; top: 65px; left: 0; right: 0; display: none; flex-direction: column; align-items: stretch; gap: 0; padding: 8px 22px 18px; border-bottom: 1px solid var(--line); background: var(--paper); box-shadow: 0 18px 24px rgba(28,54,41,.06); }
+      .nav-links.is-open { display: flex; }
+      .nav-links a { padding: 13px 0; border-bottom: 1px solid var(--line); }
+      .nav-links a:last-child { border-bottom: 0; }
+      .hero { padding: 52px 0 62px; }
+      .hero-grid { grid-template-columns: 1fr; gap: 39px; }
+      .hero h1 { max-width: 520px; margin-top: 15px; font-size: clamp(41px, 11vw, 58px); }
+      .hero-copy { font-size: 14px; }
+      .hero-visual { width: min(100%, 485px); margin: 0 auto; padding-right: 0; }
+      .quiz-card { padding: 19px; }
+      .floating-note { right: -7px; bottom: -8px; }
+      .trust-inner { min-height: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 15px 10px; padding-block: 18px; }
+      .trust-divider { display: none; }
+      .trust-item { font-size: 10px; }
+      .trust-icon { flex: 0 0 27px; }
+      .section, .contest-section { padding: 72px 0; }
+      .tutor-section { padding: 58px 0; }
+      .tutor-panel { grid-template-columns: 1fr; }
+      .tutor-intro { padding: 24px; }
+      .tutor-intro h2 { font-size: 31px; }
+      .tutor-chat { min-height: 400px; padding: 18px; }
+      .section-heading { margin-bottom: 32px; }
+      .section-heading h2 { font-size: 34px; }
+      .benefit-grid { grid-template-columns: 1fr; gap: 11px; }
+      .benefit { min-height: 0; display: grid; grid-template-columns: 42px 1fr; column-gap: 15px; padding: 19px; }
+      .benefit-icon { grid-row: 1 / span 2; margin: 1px 0 0; }
+      .benefit h3 { align-self: end; margin-bottom: 4px; }
+      .benefit p { grid-column: 2; }
+      .steps { grid-template-columns: 1fr; gap: 27px; }
+      .step { padding: 0 5px; }
+      .contest-heading { display: block; margin-bottom: 20px; }
+      .contest-heading .section-heading { margin-bottom: 19px; }
+      .contest-heading .section-heading h2 { font-size: 34px; }
+      .contest-heading .section-heading p { font-size: 12px; }
+      .filters { gap: 6px; }
+      .filter { padding: 0 11px; }
+      .contest-grid { gap: 9px; }
+      .resource-grid { grid-template-columns: 1fr; }
+      .resource-card { min-height: 0; }
+      .contest-card { min-height: 225px; padding: 14px 12px; }
+      .contest-card h3 { font-size: 13px; }
+      .contest-card p { font-size: 9px; }
+      .contest-topline { align-items: flex-start; flex-direction: column; gap: 6px; }
+      .parent-band { padding: 65px 0; }
+      .parent-grid { grid-template-columns: 1fr; gap: 29px; }
+      .parent-copy h2 { font-size: 36px; }
+      .faq-section { padding: 72px 0; }
+      .faq-grid summary { font-size: 13px; }
+      .cta-panel { align-items: flex-start; flex-direction: column; padding: 30px 25px; }
+      .cta-panel::after { right: -60px; top: -100px; }
+      .final-cta { padding-bottom: 68px; }
+      .footer-row { align-items: flex-start; flex-direction: column; }
+      .footer-links { flex-wrap: wrap; gap: 14px; }
+    }
+    @media (max-width: 390px) {
+      .wrap { width: calc(100% - 28px); }
+      .hero-actions { align-items: stretch; flex-direction: column; }
+      .hero-actions .button { width: 100%; }
+      .answers { grid-template-columns: 1fr; }
+      .contest-grid { grid-template-columns: 1fr; }
+      .contest-card { min-height: 0; }
+      .contest-card h3, .contest-card p { min-height: 0; }
+      .contest-topline { align-items: center; flex-direction: row; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="announcement">
+    Canadian Senior &amp; Intermediate Math Contest registration closes <strong>October 16</strong> · Beaver Challenge registration closes <strong>October 20</strong> · <a href="#contests">See contest dates</a>
+  </div>
+  <header class="site-header">
+    <nav class="nav wrap" aria-label="Main navigation">
+      <a class="brand" href="#top" aria-label="Stepwise home"><span class="brand-mark" aria-hidden="true"></span>stepwise</a>
+      <div class="nav-links" id="nav-links">
+        <a href="#how-it-works">How it works</a>
+        <a href="#contests">Contests</a>
+        <a href="#practice-resources">Free resources</a>
+        <a href="#tutor">Ask the tutor</a>
+        <a href="#for-families">For families</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <div class="nav-actions">
+        <a class="text-link" href="#try-it">Try a question</a>
+        <a class="button button-small" href="#try-it">Start practicing <span class="button-arrow" aria-hidden="true">↗</span></a>
+        <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links"><span aria-hidden="true">☰</span></button>
+      </div>
+    </nav>
+  </header>
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-grid wrap">
+        <div>
+          <div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span> Waterloo contest practice · Grades 5–12</div>
+          <h1 id="hero-title">Get Ready for Waterloo Contests with <span>Confidence</span></h1>
+          <p class="hero-copy">Get flexible, step-by-step help from an AI tutor focused on what you need to practice next. Prepare for the Beaver Computing Challenge, Pascal, Cayley, and Fermat Contests, the Canadian Computing Competition, and the Euclid Contest.</p>
+          <div class="hero-actions">
+            <a class="button" href="#tutor">Ask the tutor <span class="button-arrow" aria-hidden="true">↗</span></a>
+            <a class="button button-light" href="#try-it">Try a sample question</a>
+          </div>
+          <div class="hero-proof">
+            <div class="proof-avatars" aria-hidden="true"><span>5</span><span>9</span><span>12</span></div>
+            <span>One clear next step, at a time.</span>
+          </div>
+        </div>
+        <div class="hero-visual" id="try-it">
+          <div class="visual-halo" aria-hidden="true"></div>
+          <div class="quiz-card">
+            <div class="quiz-top">
+              <div class="quiz-label"><span class="sparkle" aria-hidden="true">✳</span> A quick warm-up</div>
+              <div class="streak">Your pace, your progress</div>
+            </div>
+            <h2 class="quiz-heading">Try a sample question</h2>
+            <p class="quiz-meta">Percentages · about 2 minutes</p>
+            <p class="question">A $40 textbook is marked down by 15%. With 13% tax, what do you pay?</p>
+            <div class="answers" role="group" aria-label="Choose an answer">
+              <button class="answer" type="button" data-correct="true" aria-pressed="false">$38.42</button>
+              <button class="answer" type="button" data-correct="false" aria-pressed="false">$39.10</button>
+              <button class="answer" type="button" data-correct="false" aria-pressed="false">$45.20</button>
+              <button class="answer" type="button" data-correct="false" aria-pressed="false">$34.00</button>
+            </div>
+            <p class="quiz-feedback" id="quiz-feedback" aria-live="polite"></p>
+            <div class="quiz-tools">
+              <button class="plain-action" id="hint-toggle" type="button" aria-expanded="false" aria-controls="hint">Need a hint?</button>
+              <span class="mini-note">Original sample · not an official contest question</span>
+            </div>
+            <div class="hint" id="hint" hidden>Apply the discount first. Then add tax to the discounted price—not the original price.</div>
+            <div class="solution" id="solution" hidden>
+              <strong>One step at a time:</strong>
+              <ol><li>15% off means pay 85%: $40 × 0.85 = $34.</li><li>Add 13% tax: $34 × 1.13 = <strong>$38.42.</strong></li></ol>
+            </div>
+          </div>
+          <div class="floating-note"><span class="floating-check" aria-hidden="true">✓</span> Learn the steps, not just the answer</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="trust-strip" aria-label="Who this is for">        <div class="trust-inner wrap">
+          <div class="trust-item"><span class="trust-icon" aria-hidden="true">↗</span>Grades 5–12</div>
+        <span class="trust-divider" aria-hidden="true"></span>
+        <div class="trust-item"><span class="trust-icon" aria-hidden="true">◎</span>Math &amp; computing contests</div>
+        <span class="trust-divider" aria-hidden="true"></span>
+        <div class="trust-item"><span class="trust-icon" aria-hidden="true">◷</span>Practice that fits your day</div>
+        <span class="trust-divider" aria-hidden="true"></span>
+        <div class="trust-item"><span class="trust-icon" aria-hidden="true">✳</span>Clear, step-by-step help</div>
+      </div>
+    </section>
+
+    <section class="section" id="how-it-works">
+      <div class="wrap">
+        <div class="section-heading">
+          <div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>A little practice adds up</div>
+          <h2>Less guessing. More “I get it.”</h2>
+          <p>Between classes, homework, and everything else, studying can feel like one more thing. Keep it focused on what will actually help.</p>
+        </div>
+        <div class="benefit-grid">
+          <article class="benefit"><span class="benefit-icon" aria-hidden="true">⌖</span><h3>Work on what’s tricky</h3><p>Spend practice time on the ideas you need to strengthen, instead of repeating what you already know.</p></article>
+          <article class="benefit"><span class="benefit-icon" aria-hidden="true">◷</span><h3>Fit it into your week</h3><p>Short, focused practice can fit between school, a shift at work, and the rest of your life.</p></article>
+          <article class="benefit"><span class="benefit-icon" aria-hidden="true">↗</span><h3>See how to solve it</h3><p>Take problems one step at a time, understand the reasoning, and build confidence for contest day.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section soft-section">
+      <div class="wrap">
+        <div class="section-heading">
+          <div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>Simple by design</div>
+          <h2>Start where you are.<br>Build from there.</h2>
+          <p>No long study plan to figure out. Just a clear way to begin.</p>
+        </div>
+        <div class="steps">
+          <article class="step"><div class="step-number">01</div><h3>Pick your contest</h3><p>Choose the challenge and grade level you’re working toward.</p></article>
+          <article class="step"><div class="step-number">02</div><h3>Try a problem</h3><p>Take a first shot. If you get stuck, ask for a hint instead of giving up.</p></article>
+          <article class="step"><div class="step-number">03</div><h3>Learn the next step</h3><p>Follow the reasoning, then try again with a little more confidence.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="tutor-section section" id="tutor">
+      <div class="wrap">
+        <div class="tutor-panel">
+          <div class="tutor-intro">
+            <div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>Ask your contest tutor</div>
+            <h2>Stuck on a step? Let’s figure it out.</h2>
+            <p>Ask about a practice problem or an idea you’re learning. Your tutor can offer a small hint, then walk through the reasoning with you.</p>
+            <p class="tutor-note">Students under 18 need parent or guardian permission. Students under 13 should use this only with a parent or guardian.</p>
+            <ul class="tutor-steps">
+              <li><span class="tutor-step-icon" aria-hidden="true">1</span>Choose a contest and your grade.</li>
+              <li><span class="tutor-step-icon" aria-hidden="true">2</span>Ask in your own words—or pick a starter.</li>
+              <li><span class="tutor-step-icon" aria-hidden="true">3</span>Get a hint and clear, worked steps.</li>
+            </ul>
+          </div>
+          <div class="tutor-chat">
+            <div class="tutor-chat-top">
+              <span class="tutor-avatar" aria-hidden="true">✳</span>
+              <div><p class="tutor-title">Your Waterloo tutor</p><div class="tutor-status" id="tutor-status">Checking tutor availability…</div></div>
+            </div>
+            <div class="tutor-transcript" id="tutor-transcript" role="log" aria-label="Conversation with your tutor" aria-live="polite" aria-relevant="additions text">
+              <div class="tutor-message tutor-message--assistant">Hi! Pick your contest and grade, then tell me what you’re working on. I’ll start with a hint and help you through the steps.</div>
+            </div>
+            <div class="tutor-presets" aria-label="Try a starter question">
+              <button class="tutor-preset" type="button" data-prompt="How can I tell whether a number is divisible by 3?">Divisibility</button>
+              <button class="tutor-preset" type="button" data-prompt="Can you give me a starter problem about patterns and explain how to approach it?">Patterns</button>
+              <button class="tutor-preset" type="button" data-prompt="How do I begin finding the area of a triangle?">Geometry</button>
+            </div>
+            <form id="tutor-form">
+              <div class="tutor-controls">
+                <select class="tutor-select" name="contest" aria-label="Choose a contest" required>
+                  <option value="Beaver Computing Challenge">Beaver Computing Challenge</option>
+                  <option value="Pascal, Cayley, and Fermat Contests">Pascal, Cayley &amp; Fermat</option>
+                  <option value="Canadian Computing Competition">Canadian Computing Competition</option>
+                  <option value="Euclid Contest">Euclid Contest</option>
+                </select>
+                <select class="tutor-select" name="grade" aria-label="Choose your grade" required>
+                  <option value="5">Grade 5</option><option value="6">Grade 6</option><option value="7">Grade 7</option><option value="8">Grade 8</option><option value="9" selected>Grade 9</option><option value="10">Grade 10</option><option value="11">Grade 11</option><option value="12">Grade 12</option>
+                </select>
+              </div>
+              <div class="tutor-compose">
+                <textarea class="tutor-input" name="question" rows="2" maxlength="1500" required placeholder="Ask about a problem or topic…" aria-label="Your study question"></textarea>
+                <button class="tutor-send" type="submit" aria-label="Send question">↑</button>
+              </div>
+              <label class="tutor-consent"><input type="checkbox" name="guardianConsent" required><span>I’m 18+, or my parent/guardian has given permission for me to use this AI tutor.</span></label>
+              <p class="tutor-note">The site doesn’t save chats. Google’s Gemini API data-handling rules may apply to questions sent to the tutor. Don’t share personal details; verify answers with a teacher. <a href="https://ai.google.dev/gemini-api/docs/usage-policies" target="_blank" rel="noopener">Gemini API data policy</a>. Anyone under 18 needs parent/guardian permission; under 13s should have a parent/guardian send the question. <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener">Get a Gemini API key</a></p>
+              <p class="tutor-problem" id="tutor-problem" role="status" hidden></p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="contest-section" id="contests">
+      <div class="wrap">
+        <div class="contest-heading">
+          <div class="section-heading">
+            <div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>Your Waterloo contest lineup</div>
+            <h2>Find your next challenge.</h2>
+            <p>Explore the contests by grade. Dates below are from the details shared by your school.</p>
+          </div>
+          <div class="filters" role="group" aria-label="Filter contests by grade">
+            <button class="filter" type="button" data-filter="all" aria-pressed="true">All grades</button>
+            <button class="filter" type="button" data-filter="5-8" aria-pressed="false">Grades 5–8</button>
+            <button class="filter" type="button" data-filter="9-11" aria-pressed="false">Grades 9–11</button>
+            <button class="filter" type="button" data-filter="12" aria-pressed="false">Grade 12</button>
+          </div>
+        </div>
+        <div class="contest-grid" id="contest-grid" aria-live="polite">
+          <article class="contest-card" data-grades="5-12">
+            <div class="contest-topline"><span class="subject-tag">Computing</span><span class="grade-tag">Grades 5–12</span></div>
+            <h3>Beaver Computing Challenge</h3>
+            <p>A friendly introduction to computer science and computational thinking.</p>
+            <div class="contest-date"><strong>November 9–20, 2026</strong><span>Register by October 20, 2026</span></div>
+          </article>
+          <article class="contest-card" data-grades="9-11">
+            <div class="contest-topline"><span class="subject-tag">Mathematics</span><span class="grade-tag">Grades 9–11</span></div>
+            <h3>Pascal, Cayley &amp; Fermat</h3>
+            <p>Three contest levels with engaging multiple-choice math problems.</p>
+            <div class="contest-date"><strong>February 23–24, 2027</strong><span>Register by February 4, 2027</span></div>
+          </article>
+          <article class="contest-card" data-grades="9-12">
+            <div class="contest-topline"><span class="subject-tag">Computing</span><span class="grade-tag">Grades 9–12</span></div>
+            <h3>Canadian Computing Competition</h3>
+            <p>Put programming, problem-solving, and algorithm ideas to work.</p>
+            <div class="contest-date"><strong>February 17, 2027</strong><span>Register by February 6, 2027</span></div>
+          </article>
+          <article class="contest-card" data-grades="12-12">
+            <div class="contest-topline"><span class="subject-tag">Mathematics</span><span class="grade-tag">Grade 12</span></div>
+            <h3>Euclid Contest</h3>
+            <p>Take on challenging problems that reward clear mathematical thinking.</p>
+            <div class="contest-date"><strong>April 6, 2027</strong><span>Register by March 6, 2027</span></div>
+          </article>
+          <article class="contest-card" data-grades="9-12">
+            <div class="contest-topline"><span class="subject-tag">Mathematics</span><span class="grade-tag">Grades 9–12</span></div>
+            <h3>Canadian Senior &amp; Intermediate Math Contests</h3>
+            <p>Challenge yourself with short-answer and full-solution problems.</p>
+            <div class="contest-date"><strong>November 18, 2026</strong><span>Register by October 16, 2026</span></div>
+          </article>
+        </div>
+        <p class="date-note"><strong>Register through your school:</strong> the shared details say to visit Sr. Nejah in the computer lab. Check with your school for confirmation and in case dates change.</p>
+      </div>
+    </section>
+
+    <section class="section" id="practice-resources">
+      <div class="wrap">
+        <div class="section-heading">
+          <div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>Free practice resources</div>
+          <h2>Real contest papers. Ready when you are.</h2>
+          <p>Try a previous Beaver Computing Challenge paper, check the worked solutions, or see the published results.</p>
+        </div>
+        <div class="resource-grid">
+          <article class="resource-card">
+            <span class="resource-label">Practice paper · Grades 5–6</span>
+            <h3>2025 Beaver Computing Challenge</h3>
+            <p>Try the Grades 5–6 contest paper at your own pace.</p>
+            <a class="resource-link" href="resources/2025BCCContest5_6.pdf" target="_blank" rel="noopener" type="application/pdf">Open practice paper (PDF) ↗</a>
+          </article>
+          <article class="resource-card">
+            <span class="resource-label">Worked solutions · Grades 5–6</span>
+            <h3>2025 BCC Contest Solutions</h3>
+            <p>Review the answer key and explanations after you practice.</p>
+            <a class="resource-link" href="resources/2025BCCContestSolutions5_6.pdf" target="_blank" rel="noopener" type="application/pdf">Open solutions (PDF) ↗</a>
+          </article>
+          <article class="resource-card">
+            <span class="resource-label">Contest results</span>
+            <h3>2025 Beaver Challenge Results</h3>
+            <p>View the results document for the 2025 Beaver Challenge.</p>
+            <a class="resource-link" href="resources/2025BCCResults.pdf" target="_blank" rel="noopener" type="application/pdf">Open results (PDF) ↗</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="parent-band" id="for-families">
+      <div class="parent-grid wrap">
+        <div class="parent-copy">
+          <div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>For students &amp; families</div>
+          <h2>Support that feels useful—not like more pressure.</h2>
+          <p>Contest prep can be a lot to juggle. A calm, personal tutor can help students find a place to start, work through a hard problem, and keep learning on their own schedule.</p>
+        </div>
+        <div class="parent-points">
+          <div class="parent-point"><span class="parent-point-icon" aria-hidden="true">✓</span><div><strong>A clear place to begin</strong><p>Choose a contest and tackle a practice question together.</p></div></div>
+          <div class="parent-point"><span class="parent-point-icon" aria-hidden="true">↗</span><div><strong>Understanding over memorizing</strong><p>Step-by-step explanations help make the thinking behind an answer clearer.</p></div></div>
+          <div class="parent-point"><span class="parent-point-icon" aria-hidden="true">◷</span><div><strong>Room for a busy schedule</strong><p>Practice when it works—whether that’s after school or between other commitments.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq-section" id="faq">
+      <div class="wrap">
+        <div class="section-heading">
+          <div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>Good to know</div>
+          <h2>A few quick answers.</h2>
+        </div>
+        <div class="faq-grid">
+          <details><summary>Which Waterloo contests can I prepare for?</summary><p>Stepwise is focused on the Beaver Computing Challenge, Pascal, Cayley, and Fermat Contests, the Canadian Computing Competition, and the Euclid Contest. Their grade ranges are shown in the <a href="#contests">contest lineup</a>.</p></details>
+          <details><summary>Can I practice if I only have a few minutes?</summary><p>Yes. Start with one problem, ask for a hint if you need one, and work through the steps at your own pace. You can come back when you have more time.</p></details>
+          <details><summary>Are the sample questions official Waterloo contest questions?</summary><p>No. The warm-up on this page is an original example to show how step-by-step practice works. It is not an official contest question.</p></details>
+          <details><summary>How do I register for a Waterloo contest?</summary><p>The school details shared for these contests say to visit Sr. Nejah in the computer lab. Check with your school for the latest registration steps and dates.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <section class="final-cta">
+      <div class="cta-panel wrap">
+        <h2>One question is a good place to start.</h2>
+        <a class="button" href="#try-it">Try a practice question <span class="button-arrow" aria-hidden="true">↗</span></a>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-row wrap">
+      <div><a class="brand footer-brand" href="#top"><span class="brand-mark" aria-hidden="true"></span>stepwise</a><p class="footer-note">Steady practice for the next big problem.</p></div>
+      <div class="footer-links"><a href="#how-it-works">How it works</a><a href="#contests">Contests</a><a href="#practice-resources">Free resources</a><a href="#tutor">Ask the tutor</a><a href="#for-families">For families</a><a href="#faq">FAQ</a></div>
+      <span class="copyright">© 2026 Stepwise</span>
+    </div>
+  </footer>
+  <script>
+    const answerButtons = [...document.querySelectorAll('.answer')];
+    const feedback = document.querySelector('#quiz-feedback');
+    const solution = document.querySelector('#solution');
+    answerButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const correct = button.dataset.correct === 'true';
+        answerButtons.forEach((answer) => answer.setAttribute('aria-pressed', String(answer === button)));
+        feedback.textContent = correct
+          ? 'That’s right! You applied the discount first, then added tax.'
+          : 'Not quite—but you can work it out. Apply the discount first, then add tax.';
+        solution.hidden = false;
+      });
+    });
+
+    const hintToggle = document.querySelector('#hint-toggle');
+    const hint = document.querySelector('#hint');
+    hintToggle.addEventListener('click', () => {
+      const showHint = hint.hidden;
+      hint.hidden = !showHint;
+      hintToggle.setAttribute('aria-expanded', String(showHint));
+      hintToggle.textContent = showHint ? 'Hide hint' : 'Need a hint?';
+    });
+
+    const filters = [...document.querySelectorAll('.filter')];
+    const contestCards = [...document.querySelectorAll('.contest-card')];
+    filters.forEach((filter) => {
+      filter.addEventListener('click', () => {
+        const range = filter.dataset.filter;
+        filters.forEach((item) => item.setAttribute('aria-pressed', String(item === filter)));
+        contestCards.forEach((card) => {
+          if (range === 'all') {
+            card.hidden = false;
+            return;
+          }
+          const [cardMin, cardMax] = card.dataset.grades.split('-').map(Number);
+          const [filterMin, filterMax] = range.includes('-') ? range.split('-').map(Number) : [Number(range), Number(range)];
+          card.hidden = cardMax < filterMin || cardMin > filterMax;
+        });
+      });
+    });
+
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navLinks = document.querySelector('#nav-links');
+    menuToggle.addEventListener('click', () => {
+      const isOpen = menuToggle.getAttribute('aria-expanded') === 'true';
+      menuToggle.setAttribute('aria-expanded', String(!isOpen));
+      menuToggle.setAttribute('aria-label', isOpen ? 'Open menu' : 'Close menu');
+      navLinks.classList.toggle('is-open', !isOpen);
+    });
+    navLinks.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('is-open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        menuToggle.setAttribute('aria-label', 'Open menu');
+      });
+    });
+
+    const tutorForm = document.querySelector('#tutor-form');
+    const tutorTranscript = document.querySelector('#tutor-transcript');
+    const tutorInput = tutorForm.querySelector('[name="question"]');
+    const tutorProblem = document.querySelector('#tutor-problem');
+    const tutorSend = tutorForm.querySelector('.tutor-send');
+    const tutorStatus = document.querySelector('#tutor-status');
+    const tutorSelects = [...tutorForm.querySelectorAll('select')];
+    const tutorContestSelect = tutorForm.elements.contest;
+    const tutorGradeSelect = tutorForm.elements.grade;
+    const eligibleGrades = new Map([
+      ['Beaver Computing Challenge', [5, 12]],
+      ['Pascal, Cayley, and Fermat Contests', [9, 11]],
+      ['Canadian Computing Competition', [9, 12]],
+      ['Euclid Contest', [12, 12]],
+    ]);
+
+    function updateTutorGradeChoices() {
+      const [minGrade, maxGrade] = eligibleGrades.get(tutorContestSelect.value);
+      [...tutorGradeSelect.options].forEach((option) => {
+        const grade = Number(option.value);
+        option.disabled = grade < minGrade || grade > maxGrade;
+      });
+      const selectedGrade = Number(tutorGradeSelect.value);
+      if (selectedGrade < minGrade || selectedGrade > maxGrade) {
+        tutorGradeSelect.value = String(minGrade);
+      }
+    }
+    tutorContestSelect.addEventListener('change', updateTutorGradeChoices);
+    updateTutorGradeChoices();
+    let tutorBusy = false;
+    let tutorConfigured = false;
+    let turnCount = 0;
+    const maxTutorTurns = 6;
+    let consentConfirmedForSession = false;
+    const tutorHistory = [];
+    const tutorConsent = tutorForm.elements.guardianConsent;
+    const tutorPrompts = [...document.querySelectorAll('.tutor-preset')];
+
+    async function refreshTutorStatus() {
+      try {
+        const response = await fetch('/api/tutor/status', { cache: 'no-store' });
+        const status = await response.json();
+        tutorConfigured = status.configured === true;
+        tutorStatus.textContent = tutorConfigured ? 'Ready to help you learn' : 'AI connection needs setup';
+        tutorStatus.setAttribute('data-ready', String(status.configured));
+        tutorSend.disabled = !tutorConfigured;
+        tutorInput.disabled = !tutorConfigured;
+        tutorSelects.forEach((select) => { select.disabled = !tutorConfigured; });
+        tutorPrompts.forEach((button) => { button.disabled = !tutorConfigured; });
+        if (!tutorConfigured) {
+          const setupMessage = 'Your tutor is designed and ready, but live AI answers are not connected yet. The site owner needs to add a Gemini API key on the server. Your question has not been sent.';
+          const existingNotice = tutorTranscript.querySelector('[data-setup-notice]');
+          if (!existingNotice) {
+            const notice = addTutorMessage(setupMessage, 'error');
+            notice.dataset.setupNotice = 'true';
+          }
+        }
+      } catch {
+        tutorConfigured = false;
+        tutorStatus.textContent = 'Tutor server is not available';
+        tutorStatus.setAttribute('data-ready', 'false');
+        tutorSend.disabled = true;
+        tutorInput.disabled = true;
+        tutorSelects.forEach((select) => { select.disabled = true; });
+        tutorPrompts.forEach((button) => { button.disabled = true; });
+        tutorTranscript.querySelector('[data-setup-notice]')?.remove();
+        const notice = addTutorMessage('The tutoring server is not running. Start the app server, then reload this page.', 'error');
+        notice.dataset.setupNotice = 'true';
+      }
+    }
+
+    function addTutorMessage(text, kind) {
+      const message = document.createElement('div');
+      message.className = `tutor-message tutor-message--${kind}`;
+      message.textContent = text;
+      tutorTranscript.append(message);
+      while (tutorTranscript.children.length > 16) {
+        const firstMessage = tutorTranscript.firstElementChild;
+        if (firstMessage === message) break;
+        firstMessage.remove();
+      }
+      tutorTranscript.scrollTop = tutorTranscript.scrollHeight;
+      return message;
+    }
+
+    refreshTutorStatus();
+
+    async function askWaterlooTutor(question) {
+      if (tutorBusy) return;
+      if (tutorSend.disabled) return;
+      if (turnCount >= maxTutorTurns) {
+        tutorProblem.hidden = false;
+        tutorProblem.textContent = 'That’s a good practice session. Start a new page to ask more questions.';
+        return;
+      }
+      tutorBusy = true;
+      tutorProblem.hidden = true;
+      tutorSend.disabled = true;
+      tutorInput.disabled = true;
+      tutorSelects.forEach((select) => { select.disabled = true; });
+      document.querySelectorAll('.tutor-preset').forEach((button) => { button.disabled = true; });
+      addTutorMessage(question, 'student');
+      tutorHistory.push({ role: 'student', text: question });
+      while (tutorHistory.length > 6) tutorHistory.shift();
+      const typing = addTutorMessage('Thinking through a helpful hint…', 'assistant');
+      typing.classList.add('tutor-typing');
+      try {
+        const response = await fetch('/api/tutor', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contest: tutorForm.elements.contest.value,
+            grade: tutorForm.elements.grade.value,
+            question,
+            guardianConsent: tutorConsent.checked,
+            history: tutorHistory.filter((turn) => turn.role !== 'error').slice(-6),
+          }),
+        });
+        const result = await response.json();
+        typing.remove();
+        if (!response.ok) {
+          addTutorMessage(result.error || 'The tutor could not answer just now.', 'error');
+          tutorHistory.pop();
+          if (response.status === 503 && result.error?.includes('not connected')) {
+            tutorConfigured = false;
+            tutorStatus.textContent = 'AI connection needs setup';
+            tutorSend.disabled = true;
+            tutorInput.disabled = true;
+            tutorSelects.forEach((select) => { select.disabled = true; });
+            tutorPrompts.forEach((button) => { button.disabled = true; });
+          }
+          return;
+        }
+        addTutorMessage(result.answer, 'assistant');
+        tutorHistory.push({ role: 'assistant', text: result.answer });
+        turnCount += 1;
+      } catch {
+        typing.remove();
+        addTutorMessage('I could not connect just now. Check your connection and try again.', 'error');
+        tutorHistory.pop();
+      } finally {
+        tutorBusy = false;
+        tutorSend.disabled = !tutorConfigured;
+        tutorInput.disabled = !tutorConfigured;
+        tutorSelects.forEach((select) => { select.disabled = !tutorConfigured; });
+        tutorPrompts.forEach((button) => { button.disabled = !tutorConfigured; });
+        if (tutorConfigured) tutorInput.focus();
+      }
+    }
+
+    tutorForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (tutorBusy) return;
+      const question = tutorInput.value.trim();
+      if (!consentConfirmedForSession) {
+        tutorProblem.hidden = false;
+        tutorProblem.textContent = 'Please confirm parent or guardian permission before sending your question to the AI tutor.';
+        return;
+      }
+      if (question.length < 5) {
+        tutorProblem.hidden = false;
+        tutorProblem.textContent = 'Add a little more detail (at least 5 characters) so your tutor can help.';
+        tutorInput.focus();
+        return;
+      }
+      askWaterlooTutor(question);
+    });
+
+    tutorConsent.addEventListener('change', () => {
+      consentConfirmedForSession = tutorConsent.checked;
+      if (consentConfirmedForSession) tutorProblem.hidden = true;
+    });
+    tutorPrompts.forEach((button) => {
+      button.addEventListener('click', () => {
+        if (button.disabled) return;
+        if (!consentConfirmedForSession) {
+          tutorProblem.hidden = false;
+          tutorProblem.textContent = 'Please confirm parent or guardian permission before sending your question to the AI tutor.';
+          tutorConsent.focus();
+          return;
+        }
+        tutorInput.value = '';
+        tutorProblem.hidden = true;
+        askWaterlooTutor(button.dataset.prompt);
+      });
+    });
+  </script>
+</body>
+</html>
