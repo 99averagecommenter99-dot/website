@@ -5,7 +5,7 @@ A Waterloo contest-practice homepage with a private, server-side Gemini Flash tu
 ## Run locally
 
 1. Create a Gemini API key in [Google AI Studio](https://aistudio.google.com/app/apikey).
-2. Copy `.env.example` to `.env` and set `GEMINI_API_KEY` to your private key. The default model is `gemini-3.8-flash`; change `GEMINI_MODEL` if you want another supported Flash model.
+2. Copy `.env.example` to `.env` and set `GEMINI_API_KEY` to your private key. The default model is `gemini-3.6-flash`; change `GEMINI_MODEL` if you want another supported Flash model.
 3. Start the site with `node --env-file=.env api.js`.
 4. Open <http://127.0.0.1:4174>.
 

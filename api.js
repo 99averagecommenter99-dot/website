@@ -139,7 +139,7 @@ function geminiApiKey() {
 }
 
 function geminiModel() {
-  return process.env.GEMINI_MODEL || 'gemini-3.8-flash';
+  return process.env.GEMINI_MODEL || 'gemini-3.6-flash';
 }
 
 async function askTutor(input) {

@@ -104,7 +104,7 @@ async function tutor(request, env) {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), attemptTimeoutMs);
     try {
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(env.GEMINI_MODEL || 'gemini-3.8-flash')}:generateContent`, {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(env.GEMINI_MODEL || 'gemini-3.6-flash')}:generateContent`, {
         method: 'POST',
         signal: controller.signal,
         headers: { 'x-goog-api-key': apiKey, 'Content-Type': 'application/json' },

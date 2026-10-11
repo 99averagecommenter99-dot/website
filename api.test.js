@@ -17,7 +17,7 @@ let providerPayload = { candidates: [{ content: { parts: [{ text: 'Hint: split t
 let providerCalls = [];
 
 global.fetch = async (url, options = {}) => {
-  if (String(url) !== 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent') return realFetch(url, options);
+  if (!String(url).startsWith('https://generativelanguage.googleapis.com/v1beta/models/')) return realFetch(url, options);
   providerCalls.push({
     url: String(url),
     apiKey: options.headers['x-goog-api-key'],
@@ -153,6 +153,19 @@ test('serves the page, exposes only AI readiness, and protects tutor requests', 
     assert.equal(providerCalls.length, count);
   });
 
+  await t.test('uses the configured default model when constructing Gemini requests', async () => {
+    const originalModel = process.env.GEMINI_MODEL;
+    delete process.env.GEMINI_MODEL;
+    try {
+      const response = await ask(validQuestion);
+      assert.equal(response.status, 200);
+      assert.equal(providerCalls.at(-1).url, 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent');
+    } finally {
+      if (originalModel === undefined) delete process.env.GEMINI_MODEL;
+      else process.env.GEMINI_MODEL = originalModel;
+    }
+  });
+
   await t.test('returns tutor steps and sends private, bounded context to the Gemini generateContent API', async () => {
     providerCalls = [];
     const response = await ask(validQuestion);
@@ -162,7 +175,7 @@ test('serves the page, exposes only AI readiness, and protects tutor requests', 
     assert.match(result.answer, /Hint:/);
     assert.match(result.answer, /Step 1/);
     assert.equal(providerCalls.length, 1);
-    assert.equal(providerCalls[0].url, 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent');
+    assert.equal(providerCalls[0].url, 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent');
     assert.equal(providerCalls[0].apiKey, 'test-only-key');
     assert.equal(providerCalls[0].body.generationConfig.maxOutputTokens, 1024);
     assert.match(providerCalls[0].body.contents[0].parts[0].text, /The triangle is isosceles/);
