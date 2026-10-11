@@ -5,6 +5,7 @@ process.env.PORT = '0';
 process.env.HOST = '127.0.0.1';
 process.env.GEMINI_API_KEY = 'test-only-key';
 const api = require('./api.js');
+const vercelRoute = require('./api/index.js');
 const { isAllowedOrigin } = api;
 const realFetch = global.fetch;
 let origin;
@@ -75,7 +76,29 @@ test('serves the page, exposes only AI readiness, and protects tutor requests', 
     assert.equal((await ask('{}', { 'Content-Type': 'application/json', Origin: 'https://attacker.invalid' })).status, 403);
   });
 
-  await t.test('exposes the request handler Vercel uses for a captured Node server', async () => {
+  await t.test('supports parsed JSON bodies from Vercel Node.js functions', async () => {
+    const request = {
+      method: 'POST',
+      url: '/api/tutor',
+      headers: { origin, 'content-type': 'application/json' },
+      body: validQuestion,
+      socket: { remoteAddress: 'vercel-test-client' },
+      setEncoding() {},
+      on() {},
+    };
+    const response = {
+      headers: {},
+      setHeader(name, value) { this.headers[name.toLowerCase()] = value; },
+      writeHead(statusCode, headers = {}) { this.statusCode = statusCode; Object.assign(this.headers, Object.fromEntries(Object.entries(headers).map(([key, value]) => [key.toLowerCase(), value]))); },
+      end(body) { this.body = body; },
+    };
+    await vercelRoute(request, response);
+    assert.equal(response.statusCode, 200);
+    assert.match(String(response.body), /\"answer\"/);
+  });
+
+  await t.test('exposes the request handler used by Vercel routes', async () => {
+    assert.equal(typeof vercelRoute, 'function');
     assert.equal(typeof api.handleRequest, 'function');
     assert.equal(typeof api.server.listen, 'function');
   });

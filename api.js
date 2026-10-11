@@ -37,6 +37,20 @@ function sendJson(response, statusCode, payload) {
 
 function readJson(request, maxBytes = 20000) {
   return new Promise((resolve, reject) => {
+    if (request.body !== undefined) {
+      try {
+        const serialized = typeof request.body === 'string' ? request.body : JSON.stringify(request.body);
+        if (Buffer.byteLength(serialized) > maxBytes) {
+          reject(Object.assign(new Error('Request is too large.'), { statusCode: 413 }));
+          return;
+        }
+        resolve(typeof request.body === 'string' ? JSON.parse(request.body) : request.body);
+      } catch (error) {
+        reject(error.statusCode ? error : Object.assign(new Error('Send valid JSON.'), { statusCode: 400 }));
+      }
+      return;
+    }
+
     let body = '';
     let bytes = 0;
     request.setEncoding('utf8');
